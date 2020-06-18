@@ -39,9 +39,3 @@
   width: 50px;
   flex-grow: 0;
 }
-
-.profilePicture {
-  width: 30px;
-  height: 45px;
-  border-radius: 15%;
-}

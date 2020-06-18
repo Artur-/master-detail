@@ -28,14 +28,11 @@ public class DataGenerator {
 
             logger.info("Generating demo data");
 
-            logger.info("... generating Person entities...");
+            logger.info("... generating 100 Person entities...");
             ExampleDataGenerator<Person> personRepositoryGenerator = new ExampleDataGenerator<>(Person.class, seed);
-            personRepositoryGenerator.setData(Person::setId, DataType.ID);
-            personRepositoryGenerator.setData(Person::setProfilePicture, DataType.PROFILE_PICTURE_URL);
             personRepositoryGenerator.setData(Person::setFirstName, DataType.FIRST_NAME);
             personRepositoryGenerator.setData(Person::setLastName, DataType.LAST_NAME);
             personRepositoryGenerator.setData(Person::setEmail, DataType.EMAIL);
-            personRepositoryGenerator.setData(Person::setOccupation, DataType.OCCUPATION);
             personRepository.saveAll(personRepositoryGenerator.create(100));
 
 

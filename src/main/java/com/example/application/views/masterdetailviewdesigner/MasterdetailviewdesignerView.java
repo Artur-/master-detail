@@ -1,6 +1,5 @@
 package com.example.application.views.masterdetailviewdesigner;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import com.example.application.data.CrudServiceDataProvider;
 import com.example.application.data.entity.Person;
 import com.example.application.data.service.PersonService;
@@ -9,29 +8,34 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.dependency.JsModule;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.polymertemplate.Id;
 import com.vaadin.flow.component.polymertemplate.PolymerTemplate;
+import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
-import com.vaadin.flow.data.renderer.TemplateRenderer;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
-
 import com.vaadin.flow.templatemodel.TemplateModel;
+
+
+import org.springframework.beans.factory.annotation.Autowired;
 
 @Route(value = "master-detail-view-designer")
 @PageTitle("master-detail-view-designer")
-@CssImport("views/masterdetailviewdesigner/masterdetailviewdesigner-view.css")
 @JsModule("./views/masterdetailviewdesigner/masterdetailviewdesigner-view.js")
 @Tag("masterdetailviewdesigner-view")
-public class MasterdetailviewdesignerView extends PolymerTemplate<TemplateModel>  {
+public class MasterdetailviewdesignerView extends PolymerTemplate<TemplateModel> {
 
-    @Id
-    private Grid<Person> grid;
-    
-        @Id
-    private TextField profilePicture;
+    // This is the Java companion file of a design
+    // You can find the design file in 
+    // /frontend/src/views/views/masterdetailviewdesigner/masterdetailviewdesigner-view.js
+    // The design can be easily edited by using Vaadin Designer (vaadin.com/designer)
+
+    // Grid is created here so we can pass the class to the constructor
+    private Grid<Person> grid = new Grid<>(Person.class);
+
     @Id
     private TextField firstName;
     @Id
@@ -39,8 +43,7 @@ public class MasterdetailviewdesignerView extends PolymerTemplate<TemplateModel>
     @Id
     private TextField email;
     @Id
-    private TextField occupation;
-
+    private PasswordField password;
     
     @Id
     private Button cancel;
@@ -48,48 +51,41 @@ public class MasterdetailviewdesignerView extends PolymerTemplate<TemplateModel>
     private Button save;
 
     private Binder<Person> binder;
-    private PersonService entityService;
 
-    public MasterdetailviewdesignerView(@Autowired PersonService entityService) {
-        this.entityService = entityService;
+    public MasterdetailviewdesignerView(@Autowired PersonService personService) {
+        setId("masterdetailviewdesigner-view");
+        grid.setColumns("firstName", "lastName", "email");
+        grid.setDataProvider(new CrudServiceDataProvider<Person, Void>(personService));
+        grid.addThemeVariants(GridVariant.LUMO_NO_BORDER);
+        grid.setHeightFull();
+        // Add to the `<slot name="grid">` defined in the template
+        grid.getElement().setAttribute("slot", "grid");
+        getElement().appendChild(grid.getElement());
+        
+        // when a row is selected or deselected, populate form
+        grid.asSingleSelect().addValueChangeListener(event -> populateForm(event.getValue()));
+
+        // Configure Form
         binder = new Binder<>(Person.class);
+
+        // Bind fields. This where you'd define e.g. validation rules
         binder.bindInstanceFields(this);
+        // note that password field isn't bound since that property doesn't exist in
+        // Person
 
-                grid.addColumn(TemplateRenderer.<Person>of("<img class='profilePicture' src=[[item.url]]>").withProperty("url", Person::getProfilePicture)).setAutoWidth(true);
-        grid.addColumn(Person::getFirstName).setHeader("First Name").setAutoWidth(true);
-        grid.addColumn(Person::getLastName).setHeader("Last Name").setAutoWidth(true);
-        grid.addColumn(Person::getEmail).setHeader("Email").setAutoWidth(true);
-        grid.addColumn(Person::getOccupation).setHeader("Occupation").setAutoWidth(true);
+        // the grid valueChangeEvent will clear the form too
+        cancel.addClickListener(e -> grid.asSingleSelect().clear());
 
-
-        grid.setDataProvider(new CrudServiceDataProvider<Person, Void>(entityService));
-        grid.asSingleSelect().addValueChangeListener(event -> gridItemSelected(event.getValue()));
-
-        cancel.addClickListener(e -> this.clearForm());
         save.addClickListener(e -> {
-            save();
+            Notification.show("Not implemented");
         });
-
     }
 
-    private void gridItemSelected(Person item) {
+    private void populateForm(Person value) {
         // Value can be null as well, that clears the form
-        binder.setBean(item);
-    }
+        binder.readBean(value);
 
-    private void save() {
-        Person entity = binder.getBean();
-        try {
-            entityService.update(entity);
-            this.clearForm();
-            Notification.show("Person saved");
-        } catch (Exception e) {
-            Notification.show("Unable to save: " + e.getMessage());
-        }
-    }
-
-    private void clearForm() {
-        // This deslelects the item, which in turn clears the fields
-        grid.asSingleSelect().clear();
+        // The password field isn't bound through the binder, so handle that
+        password.setValue("");
     }
 }

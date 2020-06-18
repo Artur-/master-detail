@@ -1,7 +1,5 @@
-import * as Endpoint from "../../generated/PersonEndpoint";
-import Entity from "../../generated/com/example/application/data/entity/Person";
 import { PolymerElement } from '@polymer/polymer/polymer-element.js';
-import { html, LitElement } from '@polymer/polymer/lib/utils/html-tag.js';
+import { html } from '@polymer/polymer/lib/utils/html-tag.js';
 import '@vaadin/vaadin-split-layout/vaadin-split-layout.js';
 import '@vaadin/vaadin-grid/vaadin-grid.js';
 import '@vaadin/vaadin-grid/vaadin-grid-column.js';
@@ -15,39 +13,44 @@ import '@vaadin/vaadin-ordered-layout/vaadin-horizontal-layout.js';
 class MasterdetailviewdesignerView extends PolymerElement {
   static get template() {
     return html`
-      <vaadin-split-layout class="full-size">
-        <div class="grid-wrapper">
-          <vaadin-grid id="grid" class="full-size" theme="no-border"></vaadin-grid>
+      <style include="shared-styles">
+        :host {
+          display: block;
+          height: 100%;
+        }
+      </style>
+
+      <vaadin-split-layout style="width: 100%; height: 100%;">
+        <div style="flex-grow:1;width:100%;" id="wrapper">
+          <slot name="grid"></slot>
         </div>
-        <div id="editor-layout">
+        <div style="width:400px;padding:var(--lumo-space-l)">
           <vaadin-form-layout>
-            <vaadin-form-layout><vaadin-text-field
-          label="Profile Picture"
-          class="full-width"
-          id="profilePicture"
-        ></vaadin-text-field><vaadin-text-field
-          label="First Name"
-          class="full-width"
-          id="firstName"
-        ></vaadin-text-field><vaadin-text-field
-          label="Last Name"
-          class="full-width"
-          id="lastName"
-        ></vaadin-text-field><vaadin-text-field
-          label="Email"
-          class="full-width"
-          id="email"
-        ></vaadin-text-field><vaadin-text-field
-          label="Occupation"
-          class="full-width"
-          id="occupation"
-        ></vaadin-text-field></vaadin-form-layout>
+            <vaadin-form-item>
+              <label slot="label">First name</label>
+              <vaadin-text-field class="full-width" value="" id="firstName"></vaadin-text-field>
+            </vaadin-form-item>
+            <vaadin-form-item>
+              <label slot="label">Last name</label>
+              <vaadin-text-field class="full-width" value="" id="lastName"></vaadin-text-field>
+            </vaadin-form-item>
+            <vaadin-form-item>
+              <label slot="label">Email</label>
+              <vaadin-text-field class="full-width" value="" id="email"></vaadin-text-field>
+            </vaadin-form-item>
+            <vaadin-form-item>
+              <label slot="label">Password</label>
+              <vaadin-password-field class="full-width" id="password"></vaadin-password-field>
+            </vaadin-form-item>
           </vaadin-form-layout>
-          <vaadin-horizontal-layout id="button-layout" theme="spacing">
-            <vaadin-button id="cancel" theme="tertiary">
+          <vaadin-horizontal-layout
+            style="display:flex;flex-wrap:wrap-reverse;width:100%;justify-content:flex-end;"
+            theme="spacing"
+          >
+            <vaadin-button theme="tertiary" slot="" id="cancel">
               Cancel
             </vaadin-button>
-            <vaadin-button id="save" theme="primary">
+            <vaadin-button theme="primary" id="save">
               Save
             </vaadin-button>
           </vaadin-horizontal-layout>
@@ -60,9 +63,10 @@ class MasterdetailviewdesignerView extends PolymerElement {
     return 'masterdetailviewdesigner-view';
   }
 
-  _attachDom(dom) {
-    // Do not use shadow DOM for easier styling
-    this.appendChild(dom);
+  static get properties() {
+    return {
+      // Declare your properties here.
+    };
   }
 }
 

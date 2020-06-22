@@ -1,11 +1,9 @@
 package com.example.application.views.masterdetailviewdesigner;
 
-import com.example.application.data.CrudServiceDataProvider;
 import com.example.application.data.entity.Person;
 import com.example.application.data.service.PersonService;
 import com.vaadin.flow.component.Tag;
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.dependency.JsModule;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridVariant;
@@ -19,8 +17,8 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.templatemodel.TemplateModel;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.vaadin.artur.helpers.CrudServiceDataProvider;
 
 @Route(value = "master-detail-view-designer")
 @PageTitle("master-detail-view-designer")
@@ -29,9 +27,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class MasterdetailviewdesignerView extends PolymerTemplate<TemplateModel> {
 
     // This is the Java companion file of a design
-    // You can find the design file in 
+    // You can find the design file in
     // /frontend/src/views/views/masterdetailviewdesigner/masterdetailviewdesigner-view.js
-    // The design can be easily edited by using Vaadin Designer (vaadin.com/designer)
+    // The design can be easily edited by using Vaadin Designer
+    // (vaadin.com/designer)
 
     // Grid is created here so we can pass the class to the constructor
     private Grid<Person> grid = new Grid<>(Person.class);
@@ -44,7 +43,7 @@ public class MasterdetailviewdesignerView extends PolymerTemplate<TemplateModel>
     private TextField email;
     @Id
     private PasswordField password;
-    
+
     @Id
     private Button cancel;
     @Id
@@ -61,7 +60,7 @@ public class MasterdetailviewdesignerView extends PolymerTemplate<TemplateModel>
         // Add to the `<slot name="grid">` defined in the template
         grid.getElement().setAttribute("slot", "grid");
         getElement().appendChild(grid.getElement());
-        
+
         // when a row is selected or deselected, populate form
         grid.asSingleSelect().addValueChangeListener(event -> populateForm(event.getValue()));
 

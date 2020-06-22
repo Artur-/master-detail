@@ -1,6 +1,5 @@
 package com.example.application.views.masterdetailviewjava;
 
-import com.example.application.data.CrudServiceDataProvider;
 import com.example.application.data.entity.Person;
 import com.example.application.data.service.PersonService;
 import com.vaadin.flow.component.AbstractField;
@@ -21,8 +20,8 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouteAlias;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.vaadin.artur.helpers.CrudServiceDataProvider;
 
 @Route(value = "master-detail-view-java")
 @RouteAlias(value = "")
@@ -51,7 +50,7 @@ public class MasterdetailviewjavaView extends Div {
         grid.addThemeVariants(GridVariant.LUMO_NO_BORDER);
         grid.setHeightFull();
 
-        //when a row is selected or deselected, populate form
+        // when a row is selected or deselected, populate form
         grid.asSingleSelect().addValueChangeListener(event -> populateForm(event.getValue()));
 
         // Configure Form
@@ -109,8 +108,7 @@ public class MasterdetailviewjavaView extends Div {
         wrapper.add(grid);
     }
 
-    private void addFormItem(Div wrapper, FormLayout formLayout,
-            AbstractField field, String fieldName) {
+    private void addFormItem(Div wrapper, FormLayout formLayout, AbstractField field, String fieldName) {
         formLayout.addFormItem(field, fieldName);
         wrapper.add(formLayout);
         field.getElement().getClassList().add("full-width");

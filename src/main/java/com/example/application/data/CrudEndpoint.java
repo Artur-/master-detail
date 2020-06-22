@@ -4,13 +4,15 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
+import org.vaadin.artur.helpers.CrudService;
+import org.vaadin.artur.helpers.PagingUtil;
 
 public abstract class CrudEndpoint<T, ID> {
 
     protected abstract CrudService<T, ID> getService();
 
     public List<T> list(int offset, int limit) {
-        Page<T> page = getService().list(ServiceUtil.offsetLimitToPageable(offset, limit));
+        Page<T> page = getService().list(PagingUtil.offsetLimitToPageable(offset, limit));
         return page.getContent();
     }
 

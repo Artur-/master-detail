@@ -3,7 +3,7 @@ package com.example.application.data.endpoint;
 import java.util.List;
 import java.util.Optional;
 
-import com.example.application.data.CrudEndpointWithService;
+import com.example.application.data.CrudEndpoint;
 import com.example.application.data.entity.Person;
 import com.example.application.data.service.PersonService;
 import com.vaadin.flow.server.connect.Endpoint;
@@ -13,7 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 @Endpoint
 @AnonymousAllowed
-public class PersonEndpoint extends CrudEndpointWithService<Person, Integer> {
+public class PersonEndpoint extends CrudEndpoint<Person, Integer> {
 
     private PersonService service;
 

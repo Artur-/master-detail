@@ -3,16 +3,31 @@ package com.example.application.data;
 import java.util.List;
 import java.util.Optional;
 
-public interface CrudEndpoint<T, IDTYPE> {
+import org.springframework.data.domain.Page;
 
-    public List<T> list(int offset, int limit);
+public abstract class CrudEndpoint<T, ID> {
 
-    public Optional<T> get(IDTYPE id);
+    protected abstract CrudService<T, ID> getService();
 
-    public T update(T entity);
+    public List<T> list(int offset, int limit) {
+        Page<T> page = getService().list(ServiceUtil.offsetLimitToPageable(offset, limit));
+        return page.getContent();
+    }
 
-    public void delete(IDTYPE id);
+    public Optional<T> get(ID id) {
+        return getService().get(id);
+    }
 
-    public int count();
+    public T update(T entity) {
+        return getService().update(entity);
+    }
+
+    public void delete(ID id) {
+        getService().delete(id);
+    }
+
+    public int count() {
+        return getService().count();
+    }
 
 }
